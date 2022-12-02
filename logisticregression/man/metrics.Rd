@@ -16,7 +16,7 @@ metrics(X = X, beta = initial_beta(X, y), beta_hat = beta_hat(), cutoff = 0.5)
 \item{cutoff}{A \code{numeric} specified by the user for a cutoff value.}
 }
 \value{
-A \code {vector} of the calculated metrics.
+A \code{vector} of the calculated metrics.
 #' @author Rukesh Gusain, Michael Zirpoli, Erica Maul
 }
 \description{

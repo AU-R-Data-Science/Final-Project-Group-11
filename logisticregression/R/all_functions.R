@@ -108,7 +108,7 @@ logistic_curve = function(data=data(y,X), predictor, beta_hat=beta_hat()) {
 #' @param X A \code{matrix} from which data will be pulled to fit the model.
 #' @param beta_hat A \code{matrix} of the optimized beta values.
 #' @param cutoff A \code{numeric} specified by the user for a cutoff value.
-#' @return A \code {vector} of the calculated metrics.
+#' @return A \code{vector} of the calculated metrics.
 #' #' @author Rukesh Gusain, Michael Zirpoli, Erica Maul
 #' @export
 metrics <- function(X=X,beta=initial_beta(X,y),beta_hat=beta_hat(),cutoff=0.5){
