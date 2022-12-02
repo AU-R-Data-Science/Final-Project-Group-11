@@ -3,6 +3,8 @@
 #' @param X An initial \code{matrix} to be used in the function.
 #' @param y A \code{vector} of y values to be used in the function. simulations.
 #' @return A \code{matrix} containing the initial beta value(s).
+#' #' @author Rukesh Gusain, Michael Zirpoli, Erica Maul
+#' @export
 initial_beta<- function(X,y){
   beta = solve(t(X)%*%X)%*%t(X)%*%y
   return(beta)
@@ -14,6 +16,8 @@ initial_beta<- function(X,y){
 #' @param X An initial \code{matrix} to be used in the function.
 #' @param beta The \code{matrix} of initial beta values produced in the Initial Beta function.
 #' @return A \code{numeric} of a value to be optimized.
+#' #' @author Rukesh Gusain, Michael Zirpoli, Erica Maul
+#' @export
 loss_func <-function(y,X,beta=initial_beta(X,y)){
   p <- numeric(0)
   for (i in 1:length(y)){
@@ -25,9 +29,9 @@ loss_func <-function(y,X,beta=initial_beta(X,y)){
 
 #' @title Beta Hat
 #' @description Calculate the optimized beta hat value.
-#' @param X An initial \code{matrix} to be used in the function.
-#' @param y A \code{vector} of y values to be used in the function.
 #' @return A \code{matrix} containing the resulting beta hat value(s).
+#' #' @author Rukesh Gusain, Michael Zirpoli, Erica Maul
+#' @export
 beta_hat<-function(){
   beta_hat=optim(par=initial_beta(X,y),fn=loss_func,X=X,y=y)$par
   return(beta_hat)
@@ -38,6 +42,8 @@ beta_hat<-function(){
 #' @param y A \code{vector} of y values to be used in the function.
 #' @param X A \code{matrix} to be used in the function.
 #' @return A \code{dataframe} of the inputted data.
+#' #' @author Rukesh Gusain, Michael Zirpoli, Erica Maul
+#' @export
 data<-function(y,X){
   data = data.frame(y, X)
   return(data)
@@ -50,6 +56,8 @@ data<-function(y,X){
 #' @param alpha A \code{numeric} inputted by the user to find desired quantiles.
 #' @param B A \code{numeric} describing the desired amount of bootstrap iterations.
 #' @return A \code{matrix} containing the calculated quantiles.
+#' #' @author Rukesh Gusain, Michael Zirpoli, Erica Maul
+#' @export
 bootstrap <- function(data=data(y,X),alpha,B=20){
   #initialize beta matrix
   beta_mat = matrix(NA, nrow = B, ncol = dim(X)[2])
@@ -73,10 +81,12 @@ bootstrap <- function(data=data(y,X),alpha,B=20){
 
 #' @title Logistic Curve
 #' @description Plot the logistic regression of the data.
-#' @param data The \code{matrix} of the data to use for the plot.
-#' @param predictor A \code{numeric} to assign the predictor variable
+#' @param data The \code{dataframe} of the data to use for the plot.
+#' @param predictor A \code{character} to assign the column name corresponding to the predictor.
 #' @param beta_hat A \code{matrix} of the optimized beta values.
 #' @return A plot depicting a fitted logistic curve to the actual values.
+#' #' @author Rukesh Gusain, Michael Zirpoli, Erica Maul
+#' @export
 logistic_curve = function(data=data(y,X), predictor, beta_hat=beta_hat()) {
   #find out which beta to use
   index = which(colnames(data) == predictor)
@@ -98,7 +108,9 @@ logistic_curve = function(data=data(y,X), predictor, beta_hat=beta_hat()) {
 #' @param X A \code{matrix} from which data will be pulled to fit the model.
 #' @param beta_hat A \code{matrix} of the optimized beta values.
 #' @param cutoff A \code{numeric} specified by the user for a cutoff value.
-#' @return A \code {list} of the calculated metrics.
+#' @return A \code {vector} of the calculated metrics.
+#' #' @author Rukesh Gusain, Michael Zirpoli, Erica Maul
+#' @export
 metrics <- function(X=X,beta=initial_beta(X,y),beta_hat=beta_hat(),cutoff=0.5){
   p <- numeric()
   p_predicted <- numeric()
@@ -143,9 +155,11 @@ metrics <- function(X=X,beta=initial_beta(X,y),beta_hat=beta_hat(),cutoff=0.5){
 }
 
 #' @title Metrics Plot
-#' @description Plot a user-assigned metric on a grid.
+#' @description Plot a user-assigned metric on a grid. The following metrics can be inputted as characters and, therefore, calculated: `Prevalence`, `Accuracy`, `Sensitivity`, `Specificity`, `False_Discovery_Rate`, and `Diagnostic_Odds_Ratio`.
 #' @param metric A \code{character} assigning which metric to plot.
 #' @return A plot showing the desired matrix on a grid.
+#' #' @author Rukesh Gusain, Michael Zirpoli, Erica Maul
+#' @export
 metricsplot <- function(metric){
   cutoffs <- seq(0.1,0.9,0.1)
   metricsmat <- as.data.frame(matrix(NA,nrow = 6,ncol = length(cutoffs)))
@@ -158,5 +172,3 @@ metricsplot <- function(metric){
   plot(y=metricsmat[metric,],x=cutoffs,xlab="Cut-offs",ylab=metric)
 }
 
-#' @author Rukesh Gusain, Michael Zirpoli, Erica Maul
-#' @export
