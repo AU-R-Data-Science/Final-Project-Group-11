@@ -65,11 +65,10 @@ bootstrap <- function(data=data(y,X),alpha,B=20){
     #sample from data of predictors and response
     boot_data = data[sample(1:nrow(data), nrow(data), replace = TRUE), ]
     #rename the rows of boot_data to 1,2,3,... This is so that in loss_func, the iterations are okay
-    row.names(boot_data) = 1:100
+    row.names(boot_data) = 1:nrow(data)
     #get the beta_hats
     beta_mat[b, ] = optim(par=initial_beta(X,y),fn=loss_func,X=as.matrix(boot_data[,c(2:ncol(boot_data))]),y=boot_data[,1])$par
   }
-  alpha=0.05
   quantiles <- matrix(NA,nrow=ncol(beta_mat),2)
   for (i in 1:ncol(beta_mat)){
     quantiles[i,]=quantile(beta_mat[,i], c(alpha/2, 1 - alpha/2))
