@@ -3,7 +3,7 @@ Type: Package
 Title: Numerical optimization of a logistic regression
 Version: 0.1.0
 Author: Rukesh Gusain, Michael Zirpoli, Erica Maul
-Maintainer: erm0085@auburn.edu
+Maintainer: Erica Maul <erm0085@auburn.edu>
 Description: This package includes functions to solve for the numerical optimization of a logistic regression.
 License: AGPL-3
 Encoding: UTF-8
