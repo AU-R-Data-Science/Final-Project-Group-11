@@ -1,0 +1,63 @@
+---
+title: "logisticregression Package Walkthrough"
+author: "Erica Maul, Michael Zirpoli, Rukesh Gusain"
+date: "2022-12-02"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+The function of this vignette is to demonstrate how to use the functions in our package titled "logisticregression". The following examples use data from a csv file available on the STAT 6210 Canvas page.
+
+
+First, install the package and assign the data.
+```{r include=FALSE}
+library(devtools)
+install_github("AU-R-Data-Science/Final-Project-Group-11/logisticregression/")
+library(logisticregression)
+cropdata<-read.csv("crop.data.csv")
+y <- cropdata$density
+X <- as.matrix(cropdata[,-1])
+```
+
+
+Example of the function "initial_beta"
+```{r}
+initial_beta(X=X, y=y)
+```
+
+Example of the function "loss_func"
+```{r}
+loss_func(y=y, X=X, beta=initial_beta(X,y))
+```
+
+Example of the function "beta_hat"
+```{r}
+beta_hat()
+```
+
+Example of the function "data"
+```{r}
+data(X=X, y=y)
+```
+
+Example of the function "bootstrap"
+```{r}
+bootstrap(data=data(y=y,X=X), alpha=.05, B=20)
+```
+
+Example of the function "logistic_curve"
+```{r}
+logistic_curve(data=data(y=y,X=X), predictor="yield", beta_hat = beta_hat())
+```
+
+Example of the function "metrics"
+```{r}
+metrics(X=X, beta=initial_beta(X=X, y=y), beta_hat=beta_hat(), cutoff=.6)
+```
+
+Example of the function "metricsplot"
+```{r}
+metricsplot(metric="Accuracy")
+```
