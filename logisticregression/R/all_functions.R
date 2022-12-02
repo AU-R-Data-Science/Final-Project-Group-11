@@ -164,6 +164,65 @@ logistic_curve = function(data=data(y,X), predictor, beta_hat=beta_hat()) {
 
 }
 
+metrics <- function(X=X,beta=initial_beta(X,y),beta_hat=beta_hat(),cutoff=0.5){
+  p <- numeric()
+  p_predicted <- numeric()
+
+  for (i in 1:nrow(y)){
+    p_predicted[i] <- 1/(1+exp(-t(X[i,])%*%beta_hat))
+    if(p_predicted[i]<=cutoff)p_predicted[i]=0
+    else p_predicted[i]=1
+  }
+
+  for (i in 1:nrow(y)){
+    p[i] <- 1/(1+exp(-t(X[i,])%*%beta))
+    if(p[i]<=cutoff)p[i]=0
+    else p[i]=1
+  }
+  TP=0
+  TN=0
+  FP=0
+  FN=0
+  confusionmatrix<-rbind(p,p_predicted)
+  for (i in 1:ncol(confusionmatrix)){
+    if (confusionmatrix["p",i]==1 && confusionmatrix["p_predicted",i]==1) TP=TP+1
+    if(confusionmatrix["p",i]==1 && confusionmatrix["p_predicted",i]==0) FN=FN+1
+    if(confusionmatrix["p",i]==0 && confusionmatrix["p_predicted",i]==1) FP=FP+1
+    if(confusionmatrix["p",i]==0 && confusionmatrix["p_predicted",i]==0) TN=TN+1
+  }
+  Prevalence <- (FN+TP)/((FN+TP)+(FP+TN))
+  Accuracy <- (TP+TN)/(TP+TN+FP+FN)
+  Sensitivity <- TP/(TP+FN)
+  Specificity <- TN/(TN+FP)
+  False_Discovery_Rate <- FP/(FP+TP)
+  TPR <- Sensitivity
+  TNR <- Specificity
+  FPR <- 1-TNR
+  FNR <- 1-TPR
+  LRp <- TPR/FPR
+  LRn <- FNR/TNR
+  Diagnostic_Odds_Ratio <- LRp/LRn
+  c("Prevalence"=Prevalence,"Accuracy"=Accuracy,"Sensitivity"=Sensitivity,
+    "Specificity"=Specificity,"False_Discovery_Rate"=False_Discovery_Rate,
+    "Diagnostic_Odds_Ratio"=Diagnostic_Odds_Ratio)
+}
+
+################################################################################
+
+metricsplot <- function(metric){
+  cutoffs <- seq(0.1,0.9,0.1)
+  metricsmat <- as.data.frame(matrix(NA,nrow = 6,ncol = length(cutoffs)))
+
+  for (i in 1:length(cutoffs)){
+    metricsmat[,i]<-metrics(X=X,beta=initial_beta(X,y),beta_hat=beta_hat(),cutoff = cutoffs[i])
+  }
+  rownames(metricsmat) <- names(metrics(X=X,beta=initial_beta(X,y),beta_hat=beta_hat(),cutoff = 0.5))
+  colnames(metricsmat) <- cutoffs
+  plot(y=metricsmat[metric,],x=cutoffs,xlab="Cut-offs",ylab=metric)
+}
+
+
+
 
 
 #' @author Rukesh Gusain, Michael Zirpoli, Erica Maul
