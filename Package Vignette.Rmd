@@ -12,7 +12,7 @@ The function of this vignette is to demonstrate how to use the functions in our 
 
 
 First, install the package and assign the data.
-```{r include=FALSE}
+```{r, message=FALSE, warning=FALSE, message=FALSE}
 library(devtools)
 install_github("AU-R-Data-Science/Final-Project-Group-11/logisticregression/")
 library(logisticregression)
@@ -48,6 +48,7 @@ bootstrap(data=data(y=y,X=X), alpha=.05, B=20)
 ```
 
 Example of the function "logistic_curve"
+Note here that the line produced in the plot is not very good. That is because the data we chose from Canvas is not appropriate for a logistic regression. Yet, the function works and plots all intended elements and, for that reason, we print the plot:
 ```{r}
 logistic_curve(data=data(y=y,X=X), predictor="yield", beta_hat = beta_hat())
 ```
